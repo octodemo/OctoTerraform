@@ -41,6 +41,7 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     environment: production
+    needs: terraform-plan
     steps:
     - name: Caching
       uses: actions/cache@v1
