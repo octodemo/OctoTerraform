@@ -1,0 +1,64 @@
+name: Deploy with approval
+
+on:
+  workflow_dispatch
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v1
+      with:
+        path: ~/.terraform
+        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform Format
+      run: terraform fmt
+    - name: Terraform Validate
+      run: terraform validate
+    - name: Terraform Plan
+      id: plan
+      run: |
+        mkdir ~/terraform-output
+        terraform plan -no-color -out ~/terraform-output/plan
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+    - name: Upload plan
+      uses: actions/upload-artifact@v2
+      with:
+        name: terraform-plan
+        path: ~/terraform-output/
+          
+  terraform-apply:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Caching
+      uses: actions/cache@v1
+      with:
+        path: ~/.terraform
+        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+    - name: Restore plan
+      uses: actions/download-artifact@v2
+      with:
+        name: terraform-plan
+        path: ~/terraform-output/
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
+    - name: Apply
+      run: terraform apply -auto-approve ~/terraform-output/plan
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+    
