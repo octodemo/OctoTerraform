@@ -56,7 +56,6 @@ jobs:
       with:
         name: terraform-plan
         path: ~/terraform-output/
-    - name: Check restoration and cache
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
