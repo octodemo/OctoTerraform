@@ -57,6 +57,12 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
+    - name: Terraform Init
+      run: terraform init
     - name: Apply
       run: terraform apply -auto-approve ~/terraform-output/plan
       env:
