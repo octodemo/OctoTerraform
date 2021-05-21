@@ -15,7 +15,9 @@ jobs:
     - name: Caching
       uses: actions/cache@v1
       with:
-        path: .terraform
+        path: |
+          .terraform
+          terraform.tfstate
         key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -53,6 +55,8 @@ jobs:
       with:
         path: .terraform
         key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+    - name: double check cache 
+      run: ls -alR 
     - name: Restore plan
       uses: actions/download-artifact@v2
       with:
