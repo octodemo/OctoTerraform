@@ -53,7 +53,9 @@ jobs:
     - name: Caching
       uses: actions/cache@v1
       with:
-        path: .terraform
+        path: |
+          .terraform
+          terraform.tfstate
         key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
     - name: double check cache 
       run: ls -alR 
