@@ -18,7 +18,7 @@ jobs:
         path: |
           .terraform
           terraform.tfstate
-        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', maint.tf) }}
+        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', 'main.tf') }}
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -56,7 +56,7 @@ jobs:
         path: |
           .terraform
           terraform.tfstate
-        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', maint.tf) }}
+        key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', 'main.tf') }}
     - name: double check cache 
       run: |
         ls -alR 
