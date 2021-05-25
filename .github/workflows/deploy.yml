@@ -40,7 +40,6 @@ jobs:
     - name: Log plan 
       run: | 
         echo "${{ steps.plan.outputs.stdout }}" > ~/terraform-output/plan.txt
-        echo "::warning::${{ steps.plan.outputs.stdout }}"
     - name: Upload plan
       uses: actions/upload-artifact@v2
       with:
