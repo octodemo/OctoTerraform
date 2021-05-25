@@ -33,7 +33,7 @@ jobs:
       id: plan
       run: |
         mkdir ~/terraform-output
-        terraform plan -no-color -out ~/terraform-output/plan
+        terraform plan -no-color -out ~/terraform-output/plan -var-file="production.tfvars"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
@@ -45,7 +45,8 @@ jobs:
           
   terraform-apply:
     runs-on: ubuntu-latest
-    environment: production
+    environment: 
+      production
     needs: terraform-plan
     steps:
     - name: Checkout
@@ -69,7 +70,7 @@ jobs:
     - name: Terraform Init
       run: terraform init
     - name: Apply
-      run: terraform apply -auto-approve ~/terraform-output/plan
+      run: terraform apply -auto-approve ~/terraform-output/plan 
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 

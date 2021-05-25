@@ -5,13 +5,22 @@ terraform {
       version = "~> 3.27"
     }
   }
-
   required_version = ">= 0.14.9"
+}
+
+variable "ec2_region" {
+  type        = string
+  description = "The region where we want to deploy"
+
+  validation {
+    condition     = can(regex("(us(-gov)?|ap|ca|cn|eu|sa)-(central|(north|south)?(east|west)?)-\\d", var.ec2_region))
+    error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
+  }
 }
 
 provider "aws" {
   profile = "default"
-  region  = "eu-west-3"
+  region  = var.ec2_region
 }
 
 data "aws_ami" "latest-ubuntu" {
