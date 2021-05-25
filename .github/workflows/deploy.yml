@@ -37,6 +37,8 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+    - name: Log plan 
+      run: echo "${{ steps.plan.outputs.stdout }}" > ~/terraform-output/plan.txt
     - name: Upload plan
       uses: actions/upload-artifact@v2
       with:
