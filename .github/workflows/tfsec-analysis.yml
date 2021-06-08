@@ -29,9 +29,6 @@ jobs:
           sarif_file: tfsec.sarif     
           tfvars_file: production.tfvars
 
-      - name: debug
-        run: cat tfsec.sarif   
-
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
