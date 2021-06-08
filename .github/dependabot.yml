@@ -13,4 +13,4 @@ updates:
     directory: "/"
     schedule:
       # Check for updates to Terraform every month
-      interval: "weekly"
+      interval: "daily"
