@@ -23,13 +23,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run tfsec
-        uses: tfsec/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
+        # uses: tfsec/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
+        uses: helaili/tfsec-sarif-action@master
         with:
-          sarif_file: tfsec.sarif         
+          sarif_file: tfsec.sarif     
+          tfvars_file: production.tfvars
 
       - name: debug
         run: cat tfsec.sarif   
-        
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
