@@ -10,6 +10,26 @@ We have a simple Terraform file, `main.tf`, with its variables being stored in `
 
 ## Does the plan comes together? 
 
+The terraform plan is computed and saved in `~/terraform-output/plan`. As this plan is not human readable, we also save it to a file, using the `stdout` output of the `plan` step. This is possible because the `hashicorp/setup-terraform` action has the `terraform_wrapper` property enabled. 
+
+```yaml
+ - name: Terraform Plan
+      id: plan
+      run: |
+        mkdir ~/terraform-output
+        terraform plan -no-color -out ~/terraform-output/plan -var-file="production.tfvars"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+
+    - name: Log plan as plain text
+      run: | 
+        echo "${{ steps.plan.outputs.stdout }}" > ~/terraform-output/plan.txt
+```
 ## Security? Help! 
 
+TFSec... 
+
 ## What's up? 
+
+Dependabot... 
