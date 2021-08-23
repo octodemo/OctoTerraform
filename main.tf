@@ -53,3 +53,9 @@ resource "aws_instance" "app_server" {
     Terminate = "2021-06-01"
   }
 }
+
+module "local_child" {
+    source                  = "./modules"
+
+    latest-ubuntu-id        = "${data.aws_ami.latest-ubuntu.id}"
+}
