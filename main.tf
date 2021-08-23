@@ -56,6 +56,10 @@ resource "aws_instance" "app_server" {
 
 module "local_child" {
     source                  = "./modules"
+    latest-ubuntu-id        = "${data.aws_ami.latest-ubuntu.id}"
+}
 
+module "remote_child" {
+    source                  = "git::https://github.com/octodemo/OctoTerraform-Module.git//modules?ref=main"
     latest-ubuntu-id        = "${data.aws_ami.latest-ubuntu.id}"
 }
