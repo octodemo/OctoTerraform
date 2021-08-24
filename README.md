@@ -38,7 +38,7 @@ module "remote_child" {
 }
 ``` 
 
-First we need to follow the steps at [peter-murray/workflow-application-token-action](https://github.com/peter-murray/workflow-application-token-action) and store the `APPLICATION_ID` and `APPLICATION_PRIVATE_KEY` as secrets. Make sure you give the application the `Contents` repository permission and install it on all your module repositories. 
+First we need to follow the steps at [peter-murray/workflow-application-token-action](https://github.com/peter-murray/workflow-application-token-action) and store the `APPLICATION_ID` and `APPLICATION_PRIVATE_KEY` as secrets (don't commit the private key file in your repo, just copy/paste its content as a secret). Make sure you give the application the `Contents` repository permission and install it on all your module repositories. 
 
 We then use the action in a distinct `get_workflow_token` job to retrive a token. Note the `outputs` section, so that we can share the token with the `terraform-plan` and `terraform-apply` jobs.  
 
