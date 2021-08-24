@@ -26,6 +26,55 @@ The terraform plan is computed and saved in `~/terraform-output/plan`. As this p
       run: | 
         echo "${{ steps.plan.outputs.stdout }}" > ~/terraform-output/plan.txt
 ```
+
+## Using a child module from a private repo 
+
+The module referenced from `main.tf` comes from a private repository. We want to be able to use it while staying away from Personal Access Tokens and changing URLs of each module to include it. 
+
+```js
+module "remote_child" {
+    source                  = "git::https://github.com/octodemo/OctoTerraform-Module.git//modules?ref=main"
+    latest-ubuntu-id        = "${data.aws_ami.latest-ubuntu.id}"
+}
+``` 
+
+First we need to follow the steps at [peter-murray/workflow-application-token-action](https://github.com/peter-murray/workflow-application-token-action) and store the `APPLICATION_ID` and `APPLICATION_PRIVATE_KEY` as secrets. Make sure you give the application the `Contents` repository permission and install it on all your module repositories. 
+
+We then use the action in a distinct `get_workflow_token` job to retrive a token. Note the `outputs` section, so that we can share the token with the `terraform-plan` and `terraform-apply` jobs.  
+
+``` yaml
+get_workflow_token:
+    runs-on: ubuntu-latest
+    outputs:
+      token: ${{ steps.get_token.outputs.token }}
+    steps: 
+    - name: Get Token
+      id: get_token
+      uses: peter-murray/workflow-application-token-action@v1
+      with:
+        application_id: ${{ secrets.APPLICATION_ID }}
+        application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
+``` 
+
+The `terraform-plan` and `terraform-apply` jobs have to reference the `get_workflow_token` job in the `needs` section in order to access its `token` output. We then use the [fusion-engineering/setup-git-credentials](https://github.com/fusion-engineering/setup-git-credentials) action to set the credentials with this token so that Terraform has the permission to clone the child module repository. 
+
+```yaml
+terraform-apply:
+    runs-on: ubuntu-latest
+    environment: 
+      production
+    needs: 
+      - get_workflow_token 
+      - terraform-plan
+    steps:
+    - uses: fusion-engineering/setup-git-credentials@v2
+      with:
+        credentials: https://foo:{{needs.get_workflow_token.outputs.token}}@github.com
+    - name: Checkout
+      uses: actions/checkout@v2
+    .... 
+``` 
+
 ## Security? Help! 
 
 TFSec... 
