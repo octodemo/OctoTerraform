@@ -7,9 +7,24 @@ on:
     branches: [master, main]
 
 jobs:
+  get_workflow_token:
+    runs-on: ubuntu-latest
+    outputs:
+      token: ${{ steps.get_token.outputs.token }}
+    steps: 
+    - name: Get Token
+      id: get_token
+      uses: peter-murray/workflow-application-token-action@v1
+      with:
+        application_id: ${{ secrets.APPLICATION_ID }}
+        application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
   terraform-plan:
     runs-on: ubuntu-latest
+    needs: get_workflow_token
     steps:
+    - uses: fusion-engineering/setup-git-credentials@v2
+      with:
+        credentials: https://foo:{{needs.get_workflow_token.outputs.token}}@github.com
     - name: Checkout
       uses: actions/checkout@v2
     - name: Caching
@@ -50,8 +65,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       production
-    needs: terraform-plan
+    needs: 
+      - get_workflow_token 
+      - terraform-plan
     steps:
+    - uses: fusion-engineering/setup-git-credentials@v2
+      with:
+        credentials: https://foo:{{needs.get_workflow_token.outputs.token}}@github.com
     - name: Checkout
       uses: actions/checkout@v2
     - name: Caching
