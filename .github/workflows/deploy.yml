@@ -26,7 +26,7 @@ jobs:
       with:
         credentials: https://foo:{{needs.get_workflow_token.outputs.token}}@github.com
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Caching
       uses: actions/cache@v2.1.6
       with:
@@ -73,7 +73,7 @@ jobs:
       with:
         credentials: https://foo:{{needs.get_workflow_token.outputs.token}}@github.com
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Caching
       uses: actions/cache@v2.1.6
       with:
