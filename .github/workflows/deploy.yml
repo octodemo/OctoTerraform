@@ -82,7 +82,7 @@ jobs:
           terraform.tfstate
         key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', 'main.tf') }}
     - name: Restore plan
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: terraform-plan
         path: ~/terraform-output/
