@@ -56,7 +56,7 @@ jobs:
       run: | 
         echo "${{ steps.plan.outputs.stdout }}" > ~/terraform-output/plan.txt
     - name: Upload plan
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: terraform-plan
         path: ~/terraform-output/
