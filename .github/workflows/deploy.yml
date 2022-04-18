@@ -35,7 +35,7 @@ jobs:
           terraform.tfstate
         key: ${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl', 'main.tf') }}
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v2
       with:
         terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
     - name: Terraform Init
@@ -87,7 +87,7 @@ jobs:
         name: terraform-plan
         path: ~/terraform-output/
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v2
       with:
         terraform_wrapper: true #Explicitely enabling the wrapper for clarity, meanwhile it defaults to true
     - name: Terraform Init
