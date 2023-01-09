@@ -28,7 +28,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Caching
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v3.2.3
       with:
         path: |
           .terraform
@@ -75,7 +75,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Caching
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v3.2.3
       with:
         path: |
           .terraform
